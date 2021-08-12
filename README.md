@@ -6,7 +6,7 @@ you should clone this repo inside your shell repo and on your shell repo .gitign
 ##### If you got confused contact Elmahdi Mamoun in slack
 
 ## From where to get the shell program to tests on it
-you get the program from the parent of folder of the 0x16_Tests folder, which will be your shell repo
+you get the program from the parent folder of the 0x16_Tests folder, which will be your shell repo
 
 ## How to use
 #### "Usage 00 (run all test files): ./test.sh *"
