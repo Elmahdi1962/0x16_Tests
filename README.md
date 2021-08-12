@@ -1,5 +1,12 @@
 # 0x16_Tests
 Tests Scripts for the 0x16.C-Simple_shell Project
+## Where to clone
+you should clone this repo inside your shell repo and on your shell repo .gitignore file ignore this repo by adding it's name to gitignore of course
+:0x16_Tests
+##### If you got confused contact Elmahdi Mamoun in slack
+
+## From where to get the shell program to tests on it
+you get the program from the parent of folder of the 0x16_Tests folder, which will be your shell repo
 
 ## How to use
 #### "Usage 00 (run all test files): ./test.sh *"
