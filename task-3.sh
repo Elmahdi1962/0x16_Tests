@@ -1,2 +1,2 @@
 #!/bin/bash
-echo "/bin/ls -a" | ../rash
+echo "/bin/ls -a" | ../simple_shell
