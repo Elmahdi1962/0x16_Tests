@@ -1,5 +1,5 @@
 #!/bin/bash
-echo "echo 'executing cat commands.txt | ../simple_shell \ncommands file should be created in the tests folder'" | ../simple_shell
-cat commands.txt | ../simple_shell
-echo "echo ------------------------------------" | ../simple_shell
+echo -e "\n\nTesting [ ../simple_shell commands ]  in the shell ==============================================\n"
+../simple_shell commands
+echo "------------------------------------"
 

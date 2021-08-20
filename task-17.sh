@@ -1,15 +1,16 @@
 #!/bin/bash
 
-# echo "alias put='alias pt=ls;'" | ./hsh
-echo "echo 'executing alias'" | ../rash
-echo "alias" | ../rash
-echo "echo ------------------------------------" | ../rash
-echo "echo 'executing alias test1='1', test2='2'" | ../rash
-echo "alias test1='1', test2='2'" | ../rash
-echo "echo ------------------------------------" | ../rash
-echo "echo 'executing alias'" | ../rash
-echo "alias" | ../rash
-echo "echo ------------------------------------" | ../rash
-echo "echo 'executing alias test1'" | ../rash
-echo "alias test1" | ../rash
-echo "echo ------------------------------------" | ../rash
+
+echo -e "\n\nTesting [ alias put='alias pt=ls;' ]  in the shell ==============================================\n"
+echo "alias put='alias pt=ls;'" | ../simple_shell
+
+
+echo -e "\n\nTesting [ alias test1='1', test2='2' ]  in the shell ==============================================\n"
+echo "alias test1='1', test2='2'" | ../simple_shell
+
+echo -e "\n\nTesting [ alias test1 ]  in the shell ==============================================\n"
+echo "alias test1" | ../simple_shell
+
+echo -e "\n\nTesting [ alias ]  in the shell ==============================================\n"
+echo "alias" | ../simple_shell
+
