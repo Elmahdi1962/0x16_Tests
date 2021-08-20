@@ -1,3 +1,5 @@
 #!/bin/bash
-betty *.c
-betty *.h
+echo -e "\n\nRunning Betty on *.c Files =============================================="
+betty ../*.c
+echo -e "\n\nRunning Betty on *.h Files =============================================="
+betty ../*.h
