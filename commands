@@ -1,5 +1,2 @@
-echo 'im inside the commands file'
-ls -l
-echo 'still inside'
-alias
-echo 'last command in the commands file'
+setenv test 2
+echo $test
