@@ -1,4 +1,4 @@
 #!/bin/bash
-echo "echo it should print envirenemnt variables" | ../simple_shell
+echo -e "\n\nTesting [ env ]  in the shell ==============================================\n"
 echo "env" | ../simple_shell
 
