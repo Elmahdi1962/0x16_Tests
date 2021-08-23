@@ -22,7 +22,7 @@ test_cases = [
   ),
   (
     'cd -',
-    '/mnt/c/Users/Administrator/Desktop/alx_projects/simple_shell/0x16_Tests\n',# change this depends on your path 
+    '',# change this depends on your path 
     Check_Types.Success,
     0
   ),
