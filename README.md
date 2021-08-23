@@ -21,7 +21,7 @@ You get the program from the parent folder of the 0x16_Tests folder, which will 
 3. Run `test -a` to run all `.sh` test files or `test -py -a` to run all `.py` test files.
 4. Run `test file` to run a single test file. E.g.; `test task-2.sh`.
 5. Run `test #` (`#` is a number) to run a test file for a given task id. E.g.; `test 3` would run `task-3.sh`'s script. and `test -py 3` would run `task-03.py`'s script.
-6. You have to name the test scripts like this: `task-(task number).sh`. For example `task-1.sh` or `task-01.sh` (for better sorting).
+6. You have to name the test scripts like this: <br/>`task-(task number).sh`<br/>For example `task-1.sh` or `task-01.sh` (for better sorting).
 
 ## Contributing
 
