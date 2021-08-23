@@ -31,6 +31,7 @@ def run_tests(test_cases):
   new_pd = os.getcwd()
   new_envp = get_env_vars(old_pwd, new_pd)
   for i in range(len(test_cases)):
+    print("Testing : [ {} ]-------------------------".format(test_cases[i][0]))
     # feed the output from put into the pipe
     p1 = Popen(['./0x16_Tests/put', test_cases[i][0]], stdout=PIPE)
     # send the contents of the pipe into the shell program
@@ -40,7 +41,7 @@ def run_tests(test_cases):
     expected = test_cases[i][1]
     if str_eql(output, expected) or p2.returncode != test_cases[i][2]:
       print("Got:\n{}\n[chars: {}, exit_status: {}]\n".format(output, len(output), p2.returncode), end='')
-      print("Expected:\n{}\n[chars: {}, exit_status: {}]\n".format(expected, len(expected), test_cases[i][2]), end='')
+      print("Expected:\n{}\n[chars: {}, exit_status: {}]\n\n".format(expected, len(expected), test_cases[i][2]), end='')
       all_checks_passed = False
   if all_checks_passed:
     print("\033[97;42m Congratulations: \033[0m All checks passed")
