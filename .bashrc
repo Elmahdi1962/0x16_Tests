@@ -41,23 +41,28 @@ test()
 
   if [[ "$task" == "-a" ]]; then
     # Test all files
-    scripts_count=`ls | grep ".$ext" | wc -l`
-    for ((i = 0; i <= $scripts_count; i++)) do
-      if [[ -f "task-$i.$ext" ]]; then
-        "./task-$i.$ext"
-      else
-        "./task-0$i.$ext"
+    scripts_count=`ls task*.$ext | grep "task*" | wc -l`
+    script_files=()
+    readarray -t script_files < <(ls task*.$ext | grep "task*")
+    for ((i = 0; i < $scripts_count; i++)) do
+      if [[ -f "${script_files[i]}" ]]; then
+        echo "--- Executing ./${script_files[i]} ---"
+        "./${script_files[i]}"
       fi
     done
+    echo -e "\e[0m"
   elif [[ -f "$task" ]]; then
     # Test the given file
     "./$task"
+    echo -e "\e[0m"
   elif [[ -f "task-$task.$ext" || -f "task-0$task.$ext" ]]; then
     # Test the file based on task id
     if [[ -f "task-$task.$ext" ]]; then
       "./task-$task.$ext"
+      echo -e "\e[0m"
     else
       "./task-0$task.$ext"
+      echo -e "\e[0m"
     fi
   else
     echo -e "\e[31mInvalid usage\e[0m"
