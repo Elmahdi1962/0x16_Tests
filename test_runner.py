@@ -22,6 +22,7 @@ def run_tests(test_cases):
   Parameters:
   test_cases (list): A list of
   '''
+  os.environ['PS1'] = '$'
   old_pwd = os.getcwd()
   tests_failed = 0
   all_checks_passed = True
