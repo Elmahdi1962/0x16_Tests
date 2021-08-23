@@ -1,7 +1,7 @@
 #!/bin/python3
-import os, enum, re, sys
+import os, enum, re, sys, time
 from subprocess import Popen, PIPE
-import keyboard
+import pexpect
 
 class Check_Types(enum.Enum):
   Error = 1
@@ -23,26 +23,59 @@ def run_tests(test_cases):
   Parameters:
   test_cases (list): A list of
   '''
+  old_pwd = os.getcwd()
   tests_failed = 0
-  tests_passed = 0
+  all_checks_passed = True
   os.chdir(project_dir)
+  new_pd = os.getcwd()
+  new_envp = get_env_vars(old_pwd, new_pd)
   for i in range(len(test_cases)):
+    # feed the output from put into the pipe
     p1 = Popen(['./0x16_Tests/put', test_cases[i][0]], stdout=PIPE)
-    p2 = Popen([shell_file_name], stdin=p1.stdout, stdout=PIPE, env=gen_env)
+    # send the contents of the pipe into the shell program
+    p2 = Popen([shell_file_name], stdin=p1.stdout, stdout=PIPE, env=new_envp)
     p1.stdout.close()  # Allow p1 to receive a SIGPIPE if p2 exits.
-    output = p2.communicate()[0]
-    print(output.decode('ascii'), end='')
-
-    # keyboard.write(shell_file_name)
-    # keyboard.send('enter')
-    # keyboard.write(test_cases[i][0])
-    # keyboard.send('enter')
-    # keyboard.write('exit')
-    # keyboard.send('enter')
+    output = p2.communicate()[0].decode('ascii')
+    expected = test_cases[i][1]
+    if str_eql(output, expected):
+      print("Got:\n{}\n[{} chars]\n".format(output, len(output)), end='')
+      print("Expected:\n{}\n[{} chars]\n".format(expected, len(expected)), end='')
+      all_checks_passed = False
+  if all_checks_passed:
+    print("\033[97;42m Congratulations: \033[0m All checks passed")
   os.chdir(tests_dir)
 
-def run_key_presses():
-  keyboard.write("key_press")
+def ctrl_c_test():
+  old_pwd = os.getcwd()
+  os.chdir(project_dir)
+  new_pd = os.getcwd()
+  new_envp = get_env_vars(old_pwd, new_pd)
+  child = None
+  try:
+    # print("{}".format(new_envp))
+    # print("{}".format(pexpect.run("/bin/sh", env=new_envp)))
+    child = pexpect.spawn("/bin/sh", env=new_envp)
+    time.sleep(5)
+    print("alive: {}".format(child.isalive()))
+    if child.isalive():
+      child.expect(".*\r\n")
+      print("after: {}".format(child.after))
+      child.sendline("echo foo")
+      child.expect(".*\r\n")
+      print("after: {}".format(child.after))
+      # child.expect("[$] ")
+    # child.kill(2)
+  finally:
+    print("before: {}".format(child))
+    print("after: {}".format(child.after))
+  # child.sendcontrol('c')
+  # keyboard.write(shell_file_name)
+  # keyboard.write("s_file_name")
+  # keyboard.send("enter")
+  # keyboard.send("ctrl+c")
+  # keyboard.press("ctrl+c")
+  # keyboard.wait('esc')
+  os.chdir(tests_dir)
 
 def betty_checks():
   '''
@@ -132,3 +165,20 @@ def check_function_usage(func_name):
     print("\033[97;42m Congratulations: \033[0m All checks passed")
   os.chdir(tests_dir)
 
+def get_env_vars(old_pwd, cwd):
+  new_env = os.environ.copy()
+  new_env.pop("PS1")
+  # new_env.setdefault("PS1", "$ ")
+  new_env["PS1"] = "$ "
+  new_env["PWD"] = cwd
+  new_env["OLDPWD"] = old_pwd
+  return new_env
+
+def str_eql(str1, str2):
+  if len(str1) != len(str2):
+    return False
+  for c1, c2 in zip(str1, str2):
+    if (c1 != c2):
+      return False
+  return True
+  
