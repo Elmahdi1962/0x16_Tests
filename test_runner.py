@@ -3,19 +3,20 @@ import os, enum, re, sys, time, subprocess
 from subprocess import Popen, PIPE, signal as sig
 
 class Check_Types(enum.Enum):
+  from warnings import warn
+  warn("This enum is no longer being used\n")
   Error = 1
   Success = 2
 
 # The name of the shell program in your project's directory or folder
 shell_file_name = "./simple_shell"
-gen_env = os.environ
 # The relative path from this file's directory to your project directory
 project_dir = '../'
 # The relative path from your project directory to the tests directory
 # The tests directory should contain this file
 tests_dir = '0x16_Tests'
 
-def run_tests(test_cases):
+def run_tests(test_cases, show_output=False):
   '''
   Runs tests for a list of test cases
 
@@ -34,18 +35,23 @@ def run_tests(test_cases):
     output_ret_code = 0
     expected = ''
     expected_ret_code = 0
-    res1 = run_simple_shell_proc(test_cases[i], new_envp)
-    res2 = run_base_shell_proc(test_cases[i], new_envp)
+    res1 = run_simple_shell_proc(test_cases[i][0], new_envp)
+    res2 = run_base_shell_proc(test_cases[i][0], new_envp)
     output = res1[0]
     output_ret_code = res1[1]
     expected = res2[0]
     expected_ret_code = res2[1]
     if (not str_eql(output, expected)) or (output_ret_code != expected_ret_code):
-      print("Got:\n{}\n{} [chars: {}, exit_status: {}] {}".format(output, "-" * 5, len(output), output_ret_code, "-" * 5))
+      print("Got:\n\033[95m{}\033[0m\n{} [chars: {}, exit_status: {}] {}".format(output, "-" * 5, len(output), output_ret_code, "-" * 5))
       print("Expected:\n{}\n{} [chars: {}, exit_status: {}] {}".format(expected, "-" * 5, len(expected), expected_ret_code, "-" * 5))
       all_checks_passed = False
+    elif show_output:
+      print("Got:\n{}\n{} [chars: {}, exit_status: {}] {}".format(output, "-" * 5, len(output), output_ret_code, "-" * 5))
+      print("Expected:\n{}\n{} [chars: {}, exit_status: {}] {}".format(expected, "-" * 5, len(expected), expected_ret_code, "-" * 5))
   if all_checks_passed:
     print("\033[97;42m Congratulations: \033[0m All checks passed")
+  else:
+    print("\033[97;41m Pbatenghyngvbaf: \033[0m Some checks are failing")
   os.chdir(tests_dir)
 
 def run_simple_shell_proc(command_str, new_envp):
@@ -104,7 +110,7 @@ def ctrl_c_test():
     p1.kill()
     print("\033[97;42m Congratulations: \033[0m All checks passed")
   else:
-    print("\033[31mCtrl+C wasn't handled\033[0m")
+    print("\033[97;41m Pbatenghyngvbaf: \033[0m \033[31mCtrl+C wasn't handled\033[0m")
   os.chdir(tests_dir)
 
 def betty_checks():
