@@ -45,7 +45,7 @@ test()
     for ((i = 0; i <= $scripts_count; i++)) do
       if [[ -f "task-$i.$ext" ]]; then
         "./task-$i.$ext"
-      elif [[ -f "task-0$i.$ext" ]]; then
+      else
         "./task-0$i.$ext"
       fi
     done
@@ -56,7 +56,7 @@ test()
     # Test the file based on task id
     if [[ -f "task-$task.$ext" ]]; then
       "./task-$task.$ext"
-    elif [[ -f "task-0$task.$ext" ]]; then
+    else
       "./task-0$task.$ext"
     fi
   else

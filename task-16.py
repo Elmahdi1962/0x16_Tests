@@ -1,19 +1,10 @@
 #!/bin/python3
-from test_runner import run_tests, Check_Types
+from test_runner import run_tests
 
 test_cases = [
-  # Tuples folow this format:
-  #   (input_command, output_text, return_code)
-  (
-    'echo -e "\e[31mCool |\e[0m"\n',
-    'Cool |\n',
-    0
-  ),
-  (
-    'ls main.h\n',
-    'main.h',
-    0
-  )
+  'echo Hello && echo World\n',
+  'ls main.h\n',
+  "ls '*.h'\n"
 ]
 
 run_tests(test_cases)

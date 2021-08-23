@@ -1,7 +1,6 @@
 #!/bin/python3
-import os, enum, re, sys, time
+import os, enum, re, sys, time, subprocess
 from subprocess import Popen, PIPE, signal as sig
-import pexpect
 
 class Check_Types(enum.Enum):
   Error = 1
@@ -30,20 +29,64 @@ def run_tests(test_cases):
   new_pd = os.getcwd()
   new_envp = get_env_vars(old_pwd, new_pd)
   for i in range(len(test_cases)):
-    # feed the output from put into the pipe
-    p1 = Popen(['./0x16_Tests/put', test_cases[i][0]], stdout=PIPE)
-    # send the contents of the pipe into the shell program
-    p2 = Popen([shell_file_name], stdin=p1.stdout, stdout=PIPE, env=new_envp)
-    p1.stdout.close()  # Allow p1 to receive a SIGPIPE if p2 exits.
-    output = p2.communicate()[0].decode('ascii')
-    expected = test_cases[i][1]
-    if str_eql(output, expected) or p2.returncode != test_cases[i][2]:
-      print("Got:\n{}\n[chars: {}, exit_status: {}]\n".format(output, len(output), p2.returncode), end='')
-      print("Expected:\n{}\n[chars: {}, exit_status: {}]\n".format(expected, len(expected), test_cases[i][2]), end='')
+    output = ''
+    output_ret_code = 0
+    expected = ''
+    expected_ret_code = 0
+    res1 = run_simple_shell_proc(test_cases[i], new_envp)
+    res2 = run_base_shell_proc(test_cases[i], new_envp)
+    output = res1[0]
+    output_ret_code = res1[1]
+    expected = res2[0]
+    expected_ret_code = res2[1]
+    if (not str_eql(output, expected)) or (output_ret_code != expected_ret_code):
+      print("Got:\n{}\n{} [chars: {}, exit_status: {}] {}".format(output, "-" * 5, len(output), output_ret_code, "-" * 5))
+      print("Expected:\n{}\n{} [chars: {}, exit_status: {}] {}".format(expected, "-" * 5, len(expected), expected_ret_code, "-" * 5))
       all_checks_passed = False
   if all_checks_passed:
     print("\033[97;42m Congratulations: \033[0m All checks passed")
   os.chdir(tests_dir)
+
+def run_simple_shell_proc(command_str, new_envp):
+  '''
+  Runs a command in the simple shell (your own awesome shell)
+
+  Parameters:
+  command_str (str): The command to run
+  new_envp (str): The environment variable
+  '''
+  output = ''
+  output_ret_code = 0
+  # Feed the output from put into the exporting processes
+  in_p1 = Popen(['./0x16_Tests/put', command_str], stdout=PIPE, stderr=PIPE)
+  # send the contents of the pipe into the shell program
+  rec_p1 = Popen([shell_file_name], stdin=in_p1.stdout, stdout=PIPE, stderr=subprocess.STDOUT, env=new_envp)
+  in_p1.stdout.close()  # Allow in_p1 to receive a SIGPIPE if rec_p1 exits.
+  output = rec_p1.communicate()[0].decode('ascii')
+  output_ret_code = rec_p1.returncode
+  in_p1.kill()
+  rec_p1.kill()
+  return (output, output_ret_code)
+
+def run_base_shell_proc(command_str, new_envp):
+  '''
+  Runs a command in the base shell
+
+  Parameters:
+  command_str (str): The command to run
+  new_envp (str): The environment variable
+  '''
+  expected = ''
+  expected_ret_code = 0
+  rc = 0
+  in_p2 = Popen(['./0x16_Tests/put', command_str], stdout=PIPE)
+  rec_p2 = Popen(['/bin/sh'], stdin=in_p2.stdout, stdout=PIPE, stderr=subprocess.STDOUT, env=new_envp)
+  in_p2.stdout.close()
+  expected = rec_p2.communicate()[0].decode('ascii')
+  expected_ret_code = rec_p2.returncode
+  in_p2.kill()
+  rec_p2.kill()
+  return (expected, expected_ret_code)
 
 def ctrl_c_test():
   '''
