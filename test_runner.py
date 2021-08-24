@@ -6,13 +6,19 @@ class Check_Types(enum.Enum):
   '''
   Represents a set of test types that could be performed
   '''
-  # from warnings import warn
-  # warn("This enum is no longer being used\n")
+  # Compares output of your shell with the output from
+  # the base shell
   Equality = 1
-  Anything = 2
+  # Performs a predefined comparison of test cases.
+  # The output's return value should be provided as the second (index 1) item in the tuple
+  # and the exit code should be provided as the third (index 2) item in the tuple
+  Comparison = 2
+  # Choose this if you want to perform a manual review of your shell's output
+  Manual = 3
 
 # The name of the shell program in your project's directory or folder
 shell_file_name = "./simple_shell"
+base_shell_path='/bin/sh'
 # The relative path from this file's directory to your project directory
 project_dir = '../'
 # The relative path from your project directory to the tests directory
@@ -38,40 +44,37 @@ def run_tests(test_cases, show_output=False, test_type=Check_Types.Equality):
       res1 = run_simple_shell_proc(test_cases[i][0], new_envp)
       if test_type == Check_Types.Equality:
         res2 = run_base_shell_proc(test_cases[i][0], new_envp)
+      elif test_type == Check_Types.Comparison:
+        res2 = (test_cases[i][1], test_cases[i][2], res1[2])
       else:
-        res2 = (res1[0], test_cases[i][1])
+        res2 = (res1[0], res1[1], res1[2])
     else:
       res1 = run_simple_shell_proc("{}\n".format(test_cases[i][0]), new_envp)
       if test_type == Check_Types.Equality:
         res2 = run_base_shell_proc("{}\n".format(test_cases[i][0]), new_envp)
+      elif test_type == Check_Types.Comparison:
+        res2 = (test_cases[i][1], test_cases[i][2], res1[2])
       else:
-        res2 = (res1[0], test_cases[i][1])
+        res2 = (res1[0], res1[1], res1[2])
     output = res1[0]
     output_ret_code = res1[1]
+    output_pid = res1[2]
     expected = res2[0]
     expected_ret_code = res2[1]
-    if (test_type == Check_Types.Equality) and ((not str_eql(output, expected)) or (output_ret_code != expected_ret_code)):
-      print("Got:\n\033[95m{}\033[0m\n{} [chars: {}, exit_status: {}] {}".format(
-        output, "-" * 5, len(output), output_ret_code, "-" * 5))
-      print("Expected:\n{}\n{} [chars: {}, exit_status: {}] {}".format(expected, "-" * 5, len(expected), expected_ret_code, "-" * 5))
+    expected_pid = res2[2]
+    if expected.startswith("{}:".format(base_shell_path)):
+      expected = "{}{}".format(shell_file_name, expected[len(base_shell_path):])
+    if (test_type == Check_Types.Equality or test_type == Check_Types.Comparison) and ((not str_eql(output, expected)) or (output_ret_code != expected_ret_code)):
+      print_result(False, output, output_ret_code, output_pid)
+      print_result(True, expected, expected_ret_code, expected_pid)
       all_checks_passed = False
-    elif (test_type == Check_Types.Anything) and ((len(output) == 0) or (output_ret_code != test_cases[i][1])):
-      print("Got:\n\033[95m{}\033[0m\n{} [chars: {}, exit_status: {}] {}".format(
-        output, "-" * 5, len(output), output_ret_code, "-" * 5))
-      if len(output) == 0:
-        expected = "Anything"
-      else:
-        expected = output
-      print("Expected:\n{}\n{} [chars: {}, exit_status: {}] {}".format(
-        expected, "-" * 5, len(expected), expected_ret_code, "-" * 5))
-      all_checks_passed = False
-    elif show_output:
-      print("Got:\n{}\n{} [chars: {}, exit_status: {}] {}".format(
-        output, "-" * 5, len(output), output_ret_code, "-" * 5))
-      print("Expected:\n{}\n{} [chars: {}, exit_status: {}] {}".format(
-        expected, "-" * 5, len(expected), expected_ret_code, "-" * 5))
+    elif show_output or (test_type == Check_Types.Manual):
+      print_result(False, output, output_ret_code, output_pid)
+      if test_type != Check_Types.Manual:
+        print_result(True, expected, expected_ret_code, expected_pid)
   if all_checks_passed:
-    print("\033[97;42m Congratulations: \033[0m All checks passed")
+    if test_type != Check_Types.Manual:
+      print("\033[97;42m Congratulations: \033[0m All checks passed")
   else:
     print("\033[97;41m Pbatenghyngvbaf: \033[0m Some checks are failing")
   os.chdir(tests_dir)
@@ -86,6 +89,7 @@ def run_simple_shell_proc(command_str, new_envp):
   '''
   output = ''
   output_ret_code = 0
+  output_pid = 0
   # Feed the output from put into the exporting processes
   in_p1 = Popen(['./0x16_Tests/put', command_str], stdout=PIPE, stderr=PIPE)
   # send the contents of the pipe into the shell program
@@ -93,9 +97,17 @@ def run_simple_shell_proc(command_str, new_envp):
   in_p1.stdout.close()  # Allow in_p1 to receive a SIGPIPE if rec_p1 exits.
   output = rec_p1.communicate()[0].decode('ascii')
   output_ret_code = rec_p1.returncode
+  output_pid = rec_p1.pid
   in_p1.kill()
   rec_p1.kill()
-  return (output, output_ret_code)
+  return (output, output_ret_code, output_pid)
+
+def print_result(is_expected, result, res_stat_code, res_pid):
+  title = "Got"
+  if is_expected:
+    title = "Expected"
+  print("{}:\n{}\n{} [Chars: {}, Exit Status: {}: PID: {}] {}".format(title,
+        result, "-" * 5, len(result), res_stat_code, res_pid, "-" * 5))
 
 def run_base_shell_proc(command_str, new_envp):
   '''
@@ -107,15 +119,17 @@ def run_base_shell_proc(command_str, new_envp):
   '''
   expected = ''
   expected_ret_code = 0
+  expected_pid = 0
   rc = 0
   in_p2 = Popen(['./0x16_Tests/put', command_str], stdout=PIPE)
-  rec_p2 = Popen(['/bin/sh'], stdin=in_p2.stdout, stdout=PIPE, stderr=subprocess.STDOUT, env=new_envp)
+  rec_p2 = Popen([base_shell_path], stdin=in_p2.stdout, stdout=PIPE, stderr=subprocess.STDOUT, env=new_envp)
   in_p2.stdout.close()
   expected = rec_p2.communicate()[0].decode('ascii')
   expected_ret_code = rec_p2.returncode
+  expected_pid = rec_p2.pid
   in_p2.kill()
   rec_p2.kill()
-  return (expected, expected_ret_code)
+  return (expected, expected_ret_code, expected_pid)
 
 def ctrl_c_test():
   '''

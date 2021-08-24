@@ -1,5 +1,5 @@
 #!/bin/python3
-from test_runner import run_tests
+from test_runner import run_tests, Check_Types
 
 test_cases = [
   ('echo $HOME',),
@@ -8,4 +8,10 @@ test_cases = [
   ('setenv me whoami; $me',),
 ]
 
-run_tests(test_cases)
+test_cases1 = [
+  ('echo $$',),
+  ('echo $$ && echo $?',),
+]
+
+# run_tests(test_cases)
+run_tests(test_cases1, show_output=True, test_type=Check_Types.Manual)
