@@ -40,6 +40,7 @@ def run_tests(test_cases, show_output=False, test_type=Check_Types.Equality):
   new_pd = os.getcwd()
   new_envp = get_env_vars(old_pwd, new_pd)
   for i in range(len(test_cases)):
+    print("\n>>>>>>Testing : [ {} ]\n".format(test_cases[i][0]))
     if (ord(test_cases[i][0][-1]) == 10):
       res1 = run_simple_shell_proc(test_cases[i][0], new_envp)
       if test_type == Check_Types.Equality:
