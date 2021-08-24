@@ -7,7 +7,7 @@ reset=`tput sgr0`
 #test1
 echo -e "${green}\n\nTesting [ ls ; ls ..  ]  in the shell ==============================================\n"
 echo -e "${red}>>>>> OUR Shell Result:\n${reset}"
-echo "ls ; echo "Returned : \$?" ; ls .. ; echo "Returned : \$?"" | ../simple_shell #the command to test in our shell
+echo "ls ; echo "Returned : \$?" ; ls .. ; echo "Returned : \$?"" | ../../simple_shell #the command to test in our shell
 
 echo -e "\n${red}>>>>> Expected : \n${reset}"
 echo "ls ; echo "Returned : \$?" ; ls .. ; echo "Returned : \$?"" | /bin/sh #test same command in sh shell for comparing results
@@ -16,7 +16,7 @@ echo "ls ; echo "Returned : \$?" ; ls .. ; echo "Returned : \$?"" | /bin/sh #tes
 #test2
 echo -e "${green}\n\nTesting [ ls ; ls ..  ]  in the shell ==============================================\n"
 echo -e "${red}>>>>> OUR Shell Result:\n${reset}"
-echo "ls . ; echo "Returned : \$?" ; ls /nonexist ; echo "Returned : \$?"" | ../simple_shell #the command to test in our shell
+echo "ls . ; echo "Returned : \$?" ; ls /nonexist ; echo "Returned : \$?"" | ../../simple_shell #the command to test in our shell
 
 echo -e "\n${red}>>>>> Expected : \n${reset}"
 echo "ls . ; echo "Returned : \$?" ; ls /nonexist ; echo "Returned : \$?""  | /bin/sh #test same command in sh shell for comparing results
@@ -27,7 +27,7 @@ echo "ls . ; echo "Returned : \$?" ; ls /nonexist ; echo "Returned : \$?""  | /b
 #test3
 echo -e "${green}\n\nTesting [ echo 65; ; ;echo 12  ]  in the shell ==============================================\n"
 echo -e "${red}>>>>> OUR Shell Result:\n${reset}"
-echo "echo 65; ; ;echo 12" | ../simple_shell #the command to test in our shell
+echo "echo 65; ; ;echo 12" | ../../simple_shell #the command to test in our shell
 echo -e "Returned : $?"
 
 echo -e "\n${red}>>>>> Expected : \n${reset}"
@@ -37,9 +37,20 @@ echo -e "Returned : $?"
 #test4
 echo -e "${green}\n\nTesting [ ;echo 65; echo 12  ]  in the shell ==============================================\n"
 echo -e "${red}>>>>> OUR Shell Result:\n${reset}"
-echo ";echo 65; echo 12" | ../simple_shell #the command to test in our shell
+echo ";echo 65; echo 12" | ../../simple_shell #the command to test in our shell
 echo -e "Returned : $?"
 
 echo -e "\n${red}>>>>> Expected : \n${reset}"
 echo ";echo 65; echo 12"  | /bin/sh #test same command in sh shell for comparing results
+echo -e "Returned : $?"
+
+
+#test4
+echo -e "${green}\n\nTesting [ ec;echo 65; echo 12  ]  in the shell ==============================================\n"
+echo -e "${red}>>>>> OUR Shell Result:\n${reset}"
+echo "ec;echo 65; echo 12" | ../../simple_shell #the command to test in our shell
+echo -e "Returned : $?"
+
+echo -e "\n${red}>>>>> Expected : \n${reset}"
+echo "ec;echo 65; echo 12"  | /bin/sh #test same command in sh shell for comparing results
 echo -e "Returned : $?"

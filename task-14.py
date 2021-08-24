@@ -17,4 +17,4 @@ test_cases = [
   ('cd ./0x16_Tests ../',),
 ]
 
-run_tests(test_cases)
+run_tests(test_cases, show_output=True)

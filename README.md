@@ -1,20 +1,25 @@
-# 0x16_Tests
+# Test Suite - Simple_Shell
 
 Tests Scripts for the 0x16.C-Simple_shell Project
-## Where To Clone
 
 You should clone this repo inside your shell repo and in your shell repo's `.gitignore` file ignore this repo by adding it's name to gitignore of course `0x16_Tests`.
 <br/>
 <br/>
 If you got confused contact `Elmahdi Mamoun` in Slack.
 
-## From where do I get the shell program to tests on it
 
-You get the program from the parent folder of the 0x16_Tests folder, which will be your shell repo.
 
-## How To Use
+## General Information
+ - Where to get test shell programs
+ - How to use this test suite
+ - How to contribute
 
-1. First, load the **.bashrc** file into your bash terminal using `source .bashrc`.
+### Where to get test shell programs
+1. You get the program from the parent folder of the 0x16_Tests folder, which will be your shell repo.
+
+### How To Use
+
+1. Load the **.bashrc** file into your bash terminal using `source .bashrc`.
 2. The previous step would load some functions to your terminal. The functions are as follows:<br/>
    + **ss_test:** Runs one or all test script(s)
    + **help_test:** Prints the usage information for the test suite
@@ -26,6 +31,9 @@ You get the program from the parent folder of the 0x16_Tests folder, which will 
 For more information, please refer to the [Wiki](https://github.com/Elmahdi1962/0x16_Tests/wiki)
 
 ## Contributing
+### How to contribute
+
+Check the [Contributor's Guide](https://github.com/Elmahdi1962/0x16_Tests/blob/master/CONTRIBUTING.md)
 
 After contributing a test case to this repo, please add your name and email address to the [AUTHORS](AUTHORS) file. You should add your name whilst ensuring that the list of authors are in alphabetical order with the firstname provided first, an optional set of middle names, your last name, and your email address in angle brackets. This is shown in the format below.
 
