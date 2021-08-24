@@ -23,6 +23,8 @@ You get the program from the parent folder of the 0x16_Tests folder, which will 
 5. Run `ss_test #` (`#` is a number) to run a test file for a given task id. E.g.; `ss_test 3` would run `task-3.sh`'s script. and `ss_test -py 3` would run `task-03.py`'s script.
 6. You have to name the test scripts like this: <br/>`task-(task number).sh`<br/>For example `task-1.sh` or `task-01.sh` (for better sorting).
 
+For more information, please refer to the [Wiki](https://github.com/Elmahdi1962/0x16_Tests/wiki)
+
 ## Contributing
 
 After contributing a test case to this repo, please add your name and email address to the [AUTHORS](AUTHORS) file. You should add your name whilst ensuring that the list of authors are in alphabetical order with the firstname provided first, an optional set of middle names, your last name, and your email address in angle brackets. This is shown in the format below.
