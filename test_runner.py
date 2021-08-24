@@ -141,12 +141,15 @@ def betty_checks():
   Checks for Betty issues in all .c and .h files of the
   current working (project) directory.
   '''
+  old_pwd = os.getcwd()
   os.chdir(project_dir)
+  new_pd = os.getcwd()
+  new_envp = get_env_vars(old_pwd, new_pd)
   files = get_files(os.curdir)
   all_checks_passed = True
   for i in range(len(files)):
     p1 = Popen(['./0x16_Tests/put', files[i]], stdout=PIPE)
-    p2 = Popen(['betty', files[i]], stdin=p1.stdout, stdout=PIPE, env=gen_env)
+    p2 = Popen(['betty', files[i]], stdin=p1.stdout, stdout=PIPE, env=new_envp)
     p1.stdout.close()  # Allow p1 to receive a SIGPIPE if p2 exits.
     output = (p2.communicate()[0]).decode('ascii')
     output_lines = output.splitlines()
