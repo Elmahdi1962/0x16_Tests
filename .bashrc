@@ -20,7 +20,7 @@ export SHELL_PATH="../simple_shell"
 #                   (E.g.; 1 or 01, 12, etc)
 # Returns:
 #   None
-test()
+ss_test()
 {
   i=0
   scripts_count=0
@@ -80,8 +80,8 @@ test()
 #   None
 help_test()
 {
-  echo "Usage 00 (run all test files): test [-sh|-py] -a"
-  echo "Usage 01 (run test file): test FILE"
-  echo "Usage 10 (run test file based on task id): test [-sh|-py] ##"
+  echo "Usage 00 (run all test files): ss_test [-sh|-py] -a"
+  echo "Usage 01 (run test file): ss_test FILE"
+  echo "Usage 10 (run test file based on task id): ss_test [-sh|-py] ##"
   echo -e "\nIf [-sh|-py] is left empty, it is assumed to be -sh"
 }

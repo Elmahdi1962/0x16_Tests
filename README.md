@@ -16,11 +16,11 @@ You get the program from the parent folder of the 0x16_Tests folder, which will 
 
 1. First, load the **.bashrc** file into your bash terminal using `source .bashrc`.
 2. The previous step would load some functions to your terminal. The functions are as follows:<br/>
-   + **test:** Runs one or all test script(s)
+   + **ss_test:** Runs one or all test script(s)
    + **help_test:** Prints the usage information for the test suite
-3. Run `test -a` to run all `.sh` test files or `test -py -a` to run all `.py` test files.
-4. Run `test file` to run a single test file. E.g.; `test task-2.sh`.
-5. Run `test #` (`#` is a number) to run a test file for a given task id. E.g.; `test 3` would run `task-3.sh`'s script. and `test -py 3` would run `task-03.py`'s script.
+3. Run `ss_test -a` to run all `.sh` test files or `ss_test -py -a` to run all `.py` test files.
+4. Run `ss_test file` to run a single test file. E.g.; `ss_test task-2.sh`.
+5. Run `ss_test #` (`#` is a number) to run a test file for a given task id. E.g.; `ss_test 3` would run `task-3.sh`'s script. and `ss_test -py 3` would run `task-03.py`'s script.
 6. You have to name the test scripts like this: <br/>`task-(task number).sh`<br/>For example `task-1.sh` or `task-01.sh` (for better sorting).
 
 ## Contributing
