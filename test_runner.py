@@ -3,10 +3,13 @@ import os, enum, re, sys, time, subprocess
 from subprocess import Popen, PIPE, signal as sig
 
 class Check_Types(enum.Enum):
-  from warnings import warn
-  warn("This enum is no longer being used\n")
-  Error = 1
-  Success = 2
+  '''
+  Represents a set of test types that could be performed
+  '''
+  # from warnings import warn
+  # warn("This enum is no longer being used\n")
+  Equality = 1
+  Anything = 2
 
 # The name of the shell program in your project's directory or folder
 shell_file_name = "./simple_shell"
@@ -16,7 +19,7 @@ project_dir = '../'
 # The tests directory should contain this file
 tests_dir = '0x16_Tests'
 
-def run_tests(test_cases, show_output=False):
+def run_tests(test_cases, show_output=False, test_type=Check_Types.Equality):
   '''
   Runs tests for a list of test cases
 
@@ -31,27 +34,42 @@ def run_tests(test_cases, show_output=False):
   new_pd = os.getcwd()
   new_envp = get_env_vars(old_pwd, new_pd)
   for i in range(len(test_cases)):
-    output = ''
-    output_ret_code = 0
-    expected = ''
-    expected_ret_code = 0
     if (ord(test_cases[i][0][-1]) == 10):
       res1 = run_simple_shell_proc(test_cases[i][0], new_envp)
-      res2 = run_base_shell_proc(test_cases[i][0], new_envp)
+      if test_type == Check_Types.Equality:
+        res2 = run_base_shell_proc(test_cases[i][0], new_envp)
+      else:
+        res2 = (res1[0], test_cases[i][1])
     else:
       res1 = run_simple_shell_proc("{}\n".format(test_cases[i][0]), new_envp)
-      res2 = run_base_shell_proc("{}\n".format(test_cases[i][0]), new_envp)
+      if test_type == Check_Types.Equality:
+        res2 = run_base_shell_proc("{}\n".format(test_cases[i][0]), new_envp)
+      else:
+        res2 = (res1[0], test_cases[i][1])
     output = res1[0]
     output_ret_code = res1[1]
     expected = res2[0]
     expected_ret_code = res2[1]
-    if (not str_eql(output, expected)) or (output_ret_code != expected_ret_code):
-      print("Got:\n\033[95m{}\033[0m\n{} [chars: {}, exit_status: {}] {}".format(output, "-" * 5, len(output), output_ret_code, "-" * 5))
+    if (test_type == Check_Types.Equality) and ((not str_eql(output, expected)) or (output_ret_code != expected_ret_code)):
+      print("Got:\n\033[95m{}\033[0m\n{} [chars: {}, exit_status: {}] {}".format(
+        output, "-" * 5, len(output), output_ret_code, "-" * 5))
       print("Expected:\n{}\n{} [chars: {}, exit_status: {}] {}".format(expected, "-" * 5, len(expected), expected_ret_code, "-" * 5))
       all_checks_passed = False
+    elif (test_type == Check_Types.Anything) and ((len(output) == 0) or (output_ret_code != test_cases[i][1])):
+      print("Got:\n\033[95m{}\033[0m\n{} [chars: {}, exit_status: {}] {}".format(
+        output, "-" * 5, len(output), output_ret_code, "-" * 5))
+      if len(output) == 0:
+        expected = "Anything"
+      else:
+        expected = output
+      print("Expected:\n{}\n{} [chars: {}, exit_status: {}] {}".format(
+        expected, "-" * 5, len(expected), expected_ret_code, "-" * 5))
+      all_checks_passed = False
     elif show_output:
-      print("Got:\n{}\n{} [chars: {}, exit_status: {}] {}".format(output, "-" * 5, len(output), output_ret_code, "-" * 5))
-      print("Expected:\n{}\n{} [chars: {}, exit_status: {}] {}".format(expected, "-" * 5, len(expected), expected_ret_code, "-" * 5))
+      print("Got:\n{}\n{} [chars: {}, exit_status: {}] {}".format(
+        output, "-" * 5, len(output), output_ret_code, "-" * 5))
+      print("Expected:\n{}\n{} [chars: {}, exit_status: {}] {}".format(
+        expected, "-" * 5, len(expected), expected_ret_code, "-" * 5))
   if all_checks_passed:
     print("\033[97;42m Congratulations: \033[0m All checks passed")
   else:
@@ -206,6 +224,13 @@ def check_function_usage(func_name):
   os.chdir(tests_dir)
 
 def get_env_vars(old_pwd, cwd):
+  '''
+  Creates a modified version of the current environment variables
+
+  Parameters:
+  old_pwd (str): The previous current working directory
+  pwd (str): The current working directory
+  '''
   new_env = os.environ.copy()
   new_env.pop("PS1")
   # new_env.setdefault("PS1", "$ ")
