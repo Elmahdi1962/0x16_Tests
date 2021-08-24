@@ -10,14 +10,14 @@
  */
 int main (int ac, char *argv[])
 {
-  if (ac == 2)
-  {
-    printf("%s", argv[1]);
-    return (0);
-  }
-  else
-  {
-    write(STDERR_FILENO, "Usage: put text", 15);
-    return (-1);
-  }
+	if (ac == 2)
+	{
+		printf("%s", argv[1]);
+		return (0);
+	}
+	else
+	{
+		write(STDERR_FILENO, "Usage: put text", 15);
+		return (-1);
+	}
 }
