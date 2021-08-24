@@ -35,8 +35,12 @@ def run_tests(test_cases, show_output=False):
     output_ret_code = 0
     expected = ''
     expected_ret_code = 0
-    res1 = run_simple_shell_proc(test_cases[i][0], new_envp)
-    res2 = run_base_shell_proc(test_cases[i][0], new_envp)
+    if (ord(test_cases[i][0][-1]) == 10):
+      res1 = run_simple_shell_proc(test_cases[i][0], new_envp)
+      res2 = run_base_shell_proc(test_cases[i][0], new_envp)
+    else:
+      res1 = run_simple_shell_proc("{}\n".format(test_cases[i][0]), new_envp)
+      res2 = run_base_shell_proc("{}\n".format(test_cases[i][0]), new_envp)
     output = res1[0]
     output_ret_code = res1[1]
     expected = res2[0]
