@@ -15,4 +15,4 @@ test_cases = [
   ('help cd alias', 1),
 ]
 
-run_tests(test_cases, test_type=Check_Types.Anything)
+run_tests(test_cases, test_type=Check_Types.Manual)
