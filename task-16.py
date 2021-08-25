@@ -1,12 +1,19 @@
 #!/bin/python3
-from test_runner import run_tests
+from test_runner import run_tests, Check_Types
 
 test_cases = [
-  ('echo Hello && echo World\n',),
-  ('||ls main.h\n',),
-  ('ls &&',)
-  ('ls ;',)
-  (';ls',)
+  ('echo Hello && echo World',),
+  ('||ls main.h',),
+  ('ls &&',),
+  ('ls && echo coop',),
+  ('ls & &',),
 ]
 
-run_tests(test_cases)
+test_cases1 = [
+  ('echo Hello "&& echo World"',),
+  ('|ls main.h',),
+  ('& echo coop',),
+]
+
+run_tests(test_cases, show_output=True)
+run_tests(test_cases1, Check_Types.Manual)
