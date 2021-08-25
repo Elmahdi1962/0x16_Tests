@@ -1,0 +1,10 @@
+#!/bin/python3
+from test_runner import run_tests
+
+test_cases = [
+  ('exit',),
+  ('"exit"',),
+  ("'exit'",),
+]
+
+run_tests(test_cases)
