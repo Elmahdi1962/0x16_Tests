@@ -13,6 +13,13 @@ test_cases = [
   ("'exit' 27\n",),
   ("'exit ' 27\n",),
   ("'exit;' 27\n",),
+  ("exit ++123"),
+  ("exit +123"),
+  ("exit 0000000000000000"),
+  ("exit 12399999999999"),
+  ("exit --20"),
+  ("exit -34"),
+  ("exit -0")
 ]
 
 run_tests(test_cases)
