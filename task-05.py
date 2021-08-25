@@ -5,6 +5,7 @@ test_cases = [
   ('exit',),
   ('"exit"',),
   ("'exit'",),
+  ("'e'xi't'")
 ]
 
 run_tests(test_cases)
