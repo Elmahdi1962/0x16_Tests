@@ -1,23 +1,24 @@
-#!/bin/bash
-# check for the usage of strtok function
+####============== Fix This ======================###
+##!/bin/bash
+## check for the usage of strtok function
 
-command="/bin/ls
-/bin/ls
-/bin/ls"
+#command="/bin/ls
+#/bin/ls
+#/bin/ls"
 
-stop_shell
-rm -f $tmp_file
+#stop_shell
+#rm -f $tmp_file
 
-echo "$command" | $LTRACE -bc -o $LTRACEOUTPUTFILE $SHELL > $OUTPUTFILE 2> /dev/null &
+#echo "$command" | $LTRACE -bc -o $LTRACEOUTPUTFILE $SHELL > $OUTPUTFILE 2> /dev/null &
 
-$SLEEP $SLEEPSECONDS
+#$SLEEP $SLEEPSECONDS
 
-nmatch=`cat $LTRACEOUTPUTFILE | grep strtok | wc -l`
-if [ $nmatch -eq 1 ]; then
-  print_unhappy
-else
-  print_happy
-fi
+#nmatch=`cat $LTRACEOUTPUTFILE | grep strtok | wc -l`
+#if [ $nmatch -eq 1 ]; then
+#  print_unhappy
+#else
+#  print_happy
+#fi
 
-stop_shell
-rm -f $tmp_file
+#stop_shell
+#rm -f $tmp_file
