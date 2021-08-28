@@ -9,13 +9,13 @@ If you got confused contact `Elmahdi Mamoun` in Slack.
 
 ## General Information
 
- - Where to get test shell programs
+ - Where to clone this repository
  - How to use this test suite
  - How to contribute
 
 ### Where to get test shell programs
 
-1. You get the program from the parent folder of the 0x16_Tests folder, which will be your shell repo.
+1. clone this repo inside your simple_shell repo and add this repo name in gitignore so your simple_shell ignores it and do not push it in your simple_shell repo
 
 ### How To Use
 
